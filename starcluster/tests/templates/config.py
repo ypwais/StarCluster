@@ -68,6 +68,8 @@ default_config = {
     'c3_vols': 'v3',
     'c4_extends': 'c3',
     'c4_permissions': 's1',
+    'c5_extends': 'c1',
+    'c5_static_security_groups': 'c5_custom_security_group',
 }
 
 config_test_template = """
@@ -179,4 +181,8 @@ VOLUMES = %(c3_vols)s
 [cluster c4]
 EXTENDS=%(c4_extends)s
 PERMISSIONS=%(c4_permissions)s
+
+[cluster c5]
+EXTENDS=%(c5_extends)s
+STATIC_SECURITY_GROUPS= %(c5_static_security_groups)s
 """

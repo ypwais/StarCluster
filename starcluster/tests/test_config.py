@@ -319,3 +319,8 @@ class TestStarClusterConfig(tests.StarClusterTest):
         except exception.ConfigError:
             raise Exception(('config does not ignore inline '
                              'comment: %s') % valid_case)
+
+    def test_static_security_groups(self):
+        c5 = self.config.get_cluster_template('c5')
+        assert len(c5.static_security_groups) == 1
+        assert c5.static_security_groups[0] == 'c5_custom_security_group'

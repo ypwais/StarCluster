@@ -115,6 +115,9 @@ NODE_INSTANCE_TYPE = m1.small
 # list of permissions (or firewall rules) to apply to the cluster's security
 # group (OPTIONAL).
 #PERMISSIONS = ssh, http
+# list of static security groups to use in place of the default starcluster
+# security group. (OPTIONAL)
+#STATIC_SECURITY_GROUPS = my_security_group
 # Uncomment to always create a spot cluster when creating a new cluster from
 # this template. The following example will place a $0.50 bid for each spot
 # request.

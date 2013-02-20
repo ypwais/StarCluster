@@ -198,6 +198,8 @@ PERMISSION_SETTINGS = {
 }
 
 CLUSTER_SETTINGS = {
+    # setting_name ->
+    #    (parsed_value_type, is_required, default_value, choices, ??TODO??)
     'spot_bid': (float, False, None, None, None),
     'cluster_size': (int, True, None, None, None),
     'cluster_user': (str, False, 'sgeadmin', None, None),
@@ -216,4 +218,5 @@ CLUSTER_SETTINGS = {
     'disable_queue': (bool, False, False, None, None),
     'force_spot_master': (bool, False, False, None, None),
     'disable_cloudinit': (bool, False, False, None, None),
+    'static_security_groups': (list, False, [], None, None),
 }

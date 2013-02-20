@@ -362,6 +362,7 @@ class Cluster(object):
                  volumes=[],
                  plugins=[],
                  permissions=[],
+                 static_security_groups=None,
                  userdata_scripts=[],
                  refresh_interval=30,
                  disable_queue=False,
@@ -395,6 +396,7 @@ class Cluster(object):
         self.volumes = self.load_volumes(volumes)
         self.plugins = self.load_plugins(plugins)
         self.permissions = permissions
+        self.static_security_groups = static_security_groups or []
         self.userdata_scripts = userdata_scripts or []
         self.refresh_interval = refresh_interval
         self.disable_queue = disable_queue
@@ -806,14 +808,23 @@ class Cluster(object):
         image_id = image_id or self.node_image_id
         count = len(aliases) if not spot_bid else 1
         user_data = self._get_cluster_userdata(aliases)
+
+        # Use the cluster's security group by default; override
+        # with static security groups
+        if self.static_security_groups:
+            security_groups = self.static_security_groups
+        else:
+            security_groups = [cluster_sg]
+
         kwargs = dict(price=spot_bid, instance_type=instance_type,
                       min_count=count, max_count=count, count=count,
-                      key_name=self.keyname, security_groups=[cluster_sg],
+                      key_name=self.keyname, security_groups=security_groups,
                       availability_zone_group=cluster_sg,
                       launch_group=cluster_sg,
                       placement=zone or getattr(self.zone, 'name', None),
                       user_data=user_data,
                       placement_group=placement_group)
+
         resvs = []
         if spot_bid:
             for alias in aliases:

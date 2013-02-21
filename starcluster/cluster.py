@@ -1659,6 +1659,7 @@ class ClusterValidator(validators.Validator):
             self.validate_instance_types()
             self.validate_cluster_compute()
             self.validate_userdata()
+            self.validate_static_groups()
             log.info('Cluster template settings are valid')
             return True
         except exception.ClusterValidationError, e:
@@ -2047,3 +2048,9 @@ class ClusterValidator(validators.Validator):
                 "User data scripts combined and compressed must be <= 16KB\n"
                 "NOTE: StarCluster uses anywhere from 0.5-2KB "
                 "to store internal metadata" % ud_size_kb)
+
+    def validate_security_groups(self):
+        """Verify that static security groups exist."""
+        for group in self.cluster.static_security_groups:
+            # This will throw if the security group does not exist
+            self.cluster.ec2.get_security_groups(filters={'group-name': group})
